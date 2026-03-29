@@ -41,4 +41,21 @@ public class TodoFilterRequest {
     // Pagination
     private int page = 0;
     private int size = 20;
+
+    // ── Validation helper ────────────────────────────────────────────────────
+    public boolean isValid() {
+        // Validate start date range
+        if (startDateFrom != null && startDateTo != null && startDateFrom.isAfter(startDateTo)) {
+            return false;
+        }
+        // Validate end date range
+        if (endDateFrom != null && endDateTo != null && endDateFrom.isAfter(endDateTo)) {
+            return false;
+        }
+        // Validate pagination
+        if (page < 0 || size < 1) {
+            return false;
+        }
+        return true;
+    }
 }

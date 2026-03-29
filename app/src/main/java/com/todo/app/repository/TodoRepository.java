@@ -52,4 +52,13 @@ public interface TodoRepository extends JpaRepository<Todo, Long>, JpaSpecificat
             ORDER BY t.createdAt DESC
             """)
     List<Todo> searchByKeyword(@Param("userId") Long userId, @Param("q") String q);
+
+    // ── Get all distinct tags for a user (optimized query) ────────────────────
+    @Query("""
+            SELECT DISTINCT tag FROM Todo t
+            JOIN t.tags tag
+            WHERE t.user.id = :userId
+            ORDER BY tag ASC
+            """)
+    List<String> getAllDistinctTags(@Param("userId") Long userId);
 }

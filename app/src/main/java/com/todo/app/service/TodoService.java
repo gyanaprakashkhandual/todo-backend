@@ -3,6 +3,7 @@ package com.todo.app.service;
 import com.todo.app.dto.TodoFilterRequest;
 import com.todo.app.dto.TodoRequest;
 import com.todo.app.dto.TodoResponse;
+import com.todo.app.exception.BadRequestException;
 import com.todo.app.exception.ResourceNotFoundException;
 import com.todo.app.exception.UnauthorizedException;
 import com.todo.app.model.Todo;
@@ -68,6 +69,11 @@ public class TodoService {
 
     // ── READ ALL (with filter + search + pagination) ───────────────────────────
     public Page<TodoResponse> findAll(Long userId, TodoFilterRequest filter) {
+        // Validate filter
+        if (!filter.isValid()) {
+            throw new BadRequestException("Invalid filter parameters: date ranges must be valid and page >= 0");
+        }
+
         Sort sort = Sort.by(
                 "asc".equalsIgnoreCase(filter.getSortDir())
                         ? Sort.Direction.ASC
@@ -139,14 +145,12 @@ public class TodoService {
                 "cancelled", todoRepository.countByUserIdAndStatus(userId, com.todo.app.model.TodoStatus.CANCELLED));
     }
 
-    // ── Tag suggestions for the user ──────────────────────────────────────────
+    // -- Tag suggestions for the user (OPTIMIZED query) --
     public List<String> getAllTags(Long userId) {
-        return todoRepository.findAllByUserIdOrderByCreatedAtDesc(userId)
-                .stream()
-                .flatMap(t -> t.getTags().stream())
-                .distinct()
-                .sorted()
-                .collect(Collectors.toList());
+        // Verify user exists
+        loadUser(userId);
+        // Use optimized repository query instead of loading all todos
+        return todoRepository.getAllDistinctTags(userId);
     }
 
     private boolean isValidSortField(String field) {
