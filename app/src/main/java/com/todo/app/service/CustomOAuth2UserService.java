@@ -33,21 +33,26 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         String providerId;
         AuthProvider provider;
 
-        if ("google".equals(registrationId)) {
-            email = (String) attrs.get("email");
-            name = (String) attrs.get("name");
-            imageUrl = (String) attrs.get("picture");
-            providerId = (String) attrs.get("sub");
-            provider = AuthProvider.GOOGLE;
-        } else if ("github".equals(registrationId)) {
-            email = (String) attrs.get("email");
-            name = (String) attrs.get("login");
-            imageUrl = (String) attrs.get("avatar_url");
-            providerId = String.valueOf(attrs.get("id"));
-            provider = AuthProvider.GITHUB;
-        } else {
+        if (null == registrationId) {
             throw new OAuth2AuthenticationException("Unsupported provider: " + registrationId);
-        }
+        } else
+            switch (registrationId) {
+                case "google" -> {
+                    email = (String) attrs.get("email");
+                    name = (String) attrs.get("name");
+                    imageUrl = (String) attrs.get("picture");
+                    providerId = (String) attrs.get("sub");
+                    provider = AuthProvider.GOOGLE;
+                }
+                case "github" -> {
+                    email = (String) attrs.get("email");
+                    name = (String) attrs.get("login");
+                    imageUrl = (String) attrs.get("avatar_url");
+                    providerId = String.valueOf(attrs.get("id"));
+                    provider = AuthProvider.GITHUB;
+                }
+                default -> throw new OAuth2AuthenticationException("Unsupported provider: " + registrationId);
+            }
 
         User user = userRepository.findByEmail(email)
                 .map(existing -> updateExistingUser(existing, name, imageUrl))

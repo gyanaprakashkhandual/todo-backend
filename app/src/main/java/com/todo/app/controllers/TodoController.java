@@ -40,8 +40,7 @@ public class TodoController {
     @PostMapping
     public ResponseEntity<ApiResponse<TodoResponse>> create(
             @AuthenticationPrincipal UserPrincipal principal,
-            @Valid @RequestBody TodoRequest req
-    ) {
+            @Valid @RequestBody TodoRequest req) {
         TodoResponse res = todoService.create(principal.getId(), req);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -50,13 +49,12 @@ public class TodoController {
 
     // ── GET /api/todos ────────────────────────────────────────────────────────
     // Supports: ?search=&status=&priority=&tag=
-    //           &startDateFrom=&startDateTo=&endDateFrom=&endDateTo=
-    //           &sortBy=createdAt&sortDir=desc&page=0&size=20
+    // &startDateFrom=&startDateTo=&endDateFrom=&endDateTo=
+    // &sortBy=createdAt&sortDir=desc&page=0&size=20
     @GetMapping
     public ResponseEntity<ApiResponse<Page<TodoResponse>>> findAll(
             @AuthenticationPrincipal UserPrincipal principal,
-            @ModelAttribute TodoFilterRequest filter
-    ) {
+            @ModelAttribute TodoFilterRequest filter) {
         Page<TodoResponse> page = todoService.findAll(principal.getId(), filter);
         return ResponseEntity.ok(ApiResponse.success("Todos fetched", page));
     }
@@ -65,8 +63,7 @@ public class TodoController {
     // MUST be before /{id} to avoid route shadowing
     @GetMapping("/stats")
     public ResponseEntity<ApiResponse<Map<String, Long>>> getStats(
-            @AuthenticationPrincipal UserPrincipal principal
-    ) {
+            @AuthenticationPrincipal UserPrincipal principal) {
         Map<String, Long> stats = todoService.getStats(principal.getId());
         return ResponseEntity.ok(ApiResponse.success("Stats fetched", stats));
     }
@@ -75,8 +72,7 @@ public class TodoController {
     // MUST be before /{id} to avoid route shadowing
     @GetMapping("/tags")
     public ResponseEntity<ApiResponse<List<String>>> getTags(
-            @AuthenticationPrincipal UserPrincipal principal
-    ) {
+            @AuthenticationPrincipal UserPrincipal principal) {
         List<String> tags = todoService.getAllTags(principal.getId());
         return ResponseEntity.ok(ApiResponse.success("Tags fetched", tags));
     }
@@ -85,8 +81,7 @@ public class TodoController {
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<TodoResponse>> findById(
             @AuthenticationPrincipal UserPrincipal principal,
-            @PathVariable Long id
-    ) {
+            @PathVariable Long id) {
         TodoResponse res = todoService.findById(principal.getId(), id);
         return ResponseEntity.ok(ApiResponse.success("Todo fetched", res));
     }
@@ -96,8 +91,7 @@ public class TodoController {
     public ResponseEntity<ApiResponse<TodoResponse>> update(
             @AuthenticationPrincipal UserPrincipal principal,
             @PathVariable Long id,
-            @Valid @RequestBody TodoRequest req
-    ) {
+            @Valid @RequestBody TodoRequest req) {
         TodoResponse res = todoService.update(principal.getId(), id, req);
         return ResponseEntity.ok(ApiResponse.success("Todo updated", res));
     }
@@ -107,8 +101,7 @@ public class TodoController {
     public ResponseEntity<ApiResponse<TodoResponse>> patchStatus(
             @AuthenticationPrincipal UserPrincipal principal,
             @PathVariable Long id,
-            @RequestParam String value
-    ) {
+            @RequestParam String value) {
         TodoResponse res = todoService.patchStatus(principal.getId(), id, value);
         return ResponseEntity.ok(ApiResponse.success("Status updated", res));
     }
@@ -117,8 +110,7 @@ public class TodoController {
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<Void>> delete(
             @AuthenticationPrincipal UserPrincipal principal,
-            @PathVariable Long id
-    ) {
+            @PathVariable Long id) {
         todoService.delete(principal.getId(), id);
         return ResponseEntity.ok(ApiResponse.success("Todo deleted"));
     }

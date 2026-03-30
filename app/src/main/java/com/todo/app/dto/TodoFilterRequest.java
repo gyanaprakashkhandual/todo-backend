@@ -53,9 +53,6 @@ public class TodoFilterRequest {
             return false;
         }
         // Validate pagination
-        if (page < 0 || size < 1) {
-            return false;
-        }
-        return true;
+        return !(page < 0 || size < 1);
     }
 }

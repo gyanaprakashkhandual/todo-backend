@@ -19,11 +19,11 @@ import lombok.Getter;
 @AllArgsConstructor
 public class UserPrincipal implements UserDetails, OAuth2User {
 
-    private Long id;
-    private String email;
-    private String password;
-    private Collection<? extends GrantedAuthority> authorities;
-    private Map<String, Object> attributes;
+    private final Long id;
+    private final String email;
+    private final String password;
+    private final Collection<? extends GrantedAuthority> authorities;
+    private final Map<String, Object> attributes;
 
     public static UserPrincipal create(User user) {
         List<GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"));

@@ -26,6 +26,7 @@ public class SecurityConfig {
     @Autowired
     private CustomOAuth2UserService customOAuth2UserService;
     @Autowired
+    @SuppressWarnings("unused")
     private CustomUserDetailsService customUserDetailsService;
     @Autowired
     private JwtTokenProvider tokenProvider;

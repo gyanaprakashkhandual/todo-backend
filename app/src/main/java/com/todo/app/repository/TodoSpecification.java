@@ -10,8 +10,10 @@ import java.util.List;
 
 public class TodoSpecification {
 
-    private TodoSpecification() {}
+    private TodoSpecification() {
+    }
 
+    @SuppressWarnings("CollectionsToArray")
     public static Specification<Todo> build(Long userId, TodoFilterRequest filter) {
         return (root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
@@ -22,9 +24,9 @@ public class TodoSpecification {
             // ── Full-text search ──────────────────────────────────────────────
             if (filter.getSearch() != null && !filter.getSearch().isBlank()) {
                 String pattern = "%" + filter.getSearch().toLowerCase() + "%";
-                Predicate titleMatch       = cb.like(cb.lower(root.get("title")),       pattern);
-                Predicate descMatch        = cb.like(cb.lower(root.get("description")), pattern);
-                Predicate notesMatch       = cb.like(cb.lower(root.get("notes")),       pattern);
+                Predicate titleMatch = cb.like(cb.lower(root.get("title")), pattern);
+                Predicate descMatch = cb.like(cb.lower(root.get("description")), pattern);
+                Predicate notesMatch = cb.like(cb.lower(root.get("notes")), pattern);
 
                 // Tag search via join
                 Join<Object, Object> tagJoin = root.join("tags", JoinType.LEFT);
@@ -85,7 +87,6 @@ public class TodoSpecification {
     private static boolean isValidSortField(String field) {
         return field != null && List.of(
                 "createdAt", "updatedAt", "title",
-                "priority", "status", "startDate", "endDate"
-        ).contains(field);
+                "priority", "status", "startDate", "endDate").contains(field);
     }
 }
