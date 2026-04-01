@@ -25,7 +25,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
             Authentication authentication) throws IOException {
         String token = tokenProvider.generateToken(authentication);
 
-        String redirectUri = UriComponentsBuilder.fromUriString(frontendUrl + "/oauth2/redirect")
+        String redirectUri = UriComponentsBuilder.fromUriString(frontendUrl)
                 .queryParam("token", token)
                 .build().toUriString();
 
