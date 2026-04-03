@@ -20,7 +20,7 @@ public class AppConfig {
                                 "http://localhost:3000",
                                 "http://localhost:5173",
                                 "http://localhost:4200",
-                                "https://toodoo.vercel.app"));
+                                "https://toodoooo.vercel.app"));
                 config.setAllowedHeaders(List.of(
                                 "Authorization",
                                 "Content-Type",
