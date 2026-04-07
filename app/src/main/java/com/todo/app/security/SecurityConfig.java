@@ -1,8 +1,7 @@
 package com.todo.app.security;
 
-import com.todo.app.service.CustomOAuth2UserService;
-import com.todo.app.service.CustomUserDetailsService;
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -19,6 +18,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import com.todo.app.service.CustomOAuth2UserService;
+import com.todo.app.service.CustomUserDetailsService;
 
 @Configuration
 public class SecurityConfig {
@@ -54,10 +56,9 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.setAllowedOrigins(List.of(
-                "http://localhost:3000",
-                "http://localhost:5173",
-                "http://localhost:4200"));
+        config.setAllowedOriginPatterns(List.of(
+                "http://localhost:*",
+                "https://toodoooo.vercel.app"));
         config.setAllowedHeaders(List.of(
                 "Authorization",
                 "Content-Type",
